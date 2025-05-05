@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Open Translater</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+
+    textarea {
+      width: 100%;
+      max-width: 600px;
+      height: 120px;
+      margin-bottom: 10px;
+    }
+
+    select, button {
+      margin-right: 10px;
+      padding: 5px 10px;
+    }
+
+    .controls {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Open Translater</h1>
+
+  <!-- 입력창 -->
+  <textarea id="inputText" placeholder="입력하세요"></textarea>
+
+  <!-- 언어 선택 + 이미지 검색 + 음성 입력 + 번역 -->
+  <div class="controls">
+    <!-- 입력력 언어 선택 -->
+    <select id="fromLang">
+      <option value="ko">한국어</option>
+      <option value="en">영어</option>
+      <option value="ja">일본어</option>
+      <option value="zh">중국어</option>
+      <option value="es">스페인어</option>
+      <option value="fr">프랑스어</option>
+    </select>
+
+    <!-- 출력력 언어 선택 -->
+    <select id="toLang">
+      <option value="en">영어</option>
+      <option value="ko">한국어</option>
+      <option value="ja">일본어</option>
+      <option value="zh">중국어</option>
+      <option value="es">스페인어</option>
+      <option value="fr">프랑스어</option>
+    </select>
+
+    <!-- 이미지 검색 버튼 -->
+    <button>이미지 검색</button>
+
+    <!-- 음성 입력 버튼 -->
+    <button>음성 입력</button>
+
+    <!-- 번역 버튼 -->
+    <button>번역</button>
+  </div>
+
+  <!-- 출력창 -->
+  <textarea id="outputText" readonly placeholder="번역 결과가 여기에 표시됩니다"></textarea>
+
+</body>
+</html>
