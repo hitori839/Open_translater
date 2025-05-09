@@ -1,0 +1,111 @@
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+.input-column, .output-column {
+    width: 48%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.language-selection {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.language-selection select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    font-size: 16px;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-top: 30px;
+    height: 150px;
+    resize: none;
+    flex-grow: 1;
+}
+
+#translatedText {
+    margin-top: 30px;
+    padding: 15px;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 18px;
+    min-height: 150px;
+    word-wrap: break-word;
+    flex-grow: 1;
+}
+
+.copy-btn {
+    align-self: flex-start; /* 왼쪽 정렬로 변경 */
+    margin-top: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #555;
+}
+
+.copy-btn:hover {
+    color: #000;
+}
+
+
+button#translateButton {
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 30px;
+}
+
+button#translateButton:hover {
+    background-color: #45a049;
+}
+
+.button-container {
+    margin-top: 10px;
+}

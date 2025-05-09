@@ -1,13 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-  <title>Item List</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta charset="UTF-8">
+    <title>실시간 번역</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-  <h1>Items</h1>
-  <ul id="item-list"></ul>
 
-  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<div class="container">
+    <h1>실시간 번역기</h1>
+
+    <div class="row">
+        <!-- 입력 -->
+        <div class="input-column">
+            <div class="language-selection">
+                <select id="sourceLang">
+                    {% for code, name in languages.items() %}
+                        <option value="{{ code }}">{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <textarea id="text" placeholder="번역할 텍스트를 입력하세요"></textarea>
+            <button class="copy-btn" onclick="copyToClipboard('text')" title="입력 복사">📄</button>
+        </div>
+
+        <!-- 출력 -->
+        <div class="output-column">
+            <div class="language-selection">
+                <select id="targetLang">
+                    {% for code, name in languages.items() %}
+                        <option value="{{ code }}">{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div id="translatedText">번역 결과가 여기에 나타납니다.</div>
+            <button class="copy-btn" onclick="copyToClipboard('translatedText')" title="출력 복사">📄</button>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <button id="translateButton">번역하기</button>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
