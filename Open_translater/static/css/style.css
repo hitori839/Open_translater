@@ -109,3 +109,10 @@ button#translateButton:hover {
 .button-container {
     margin-top: 10px;
 }
+
+#charCount {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #666;
+    text-align: right;
+}

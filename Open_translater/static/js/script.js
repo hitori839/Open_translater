@@ -10,9 +10,14 @@ function copyToClipboard(elementId) {
 }
 
 document.getElementById("text").addEventListener("input", function() {
-    const text = document.getElementById("text").value;
+    const textArea = document.getElementById("text");
+    const text = textArea.value;
     const sourceLang = document.getElementById("sourceLang").value;
     const targetLang = document.getElementById("targetLang").value;
+
+    // 글자 수 표시
+    const charCount = text.length;
+    document.getElementById("charCount").innerText = charCount + " / 1000";
 
     if (text.trim() !== "") {
         fetch('/translate', {
