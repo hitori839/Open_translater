@@ -41,7 +41,14 @@
 
     <div class="button-container">
         <button id="translateButton">번역하기</button>
+        <a href="/history"><button>번역 기록 보기</button></a>
     </div>
+
+    <div class="keywords-section">
+        <h3>핵심 단어 및 설명</h3>
+        <ul id="keywordList"></ul> 
+    </div>
+
 </div>
 
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>

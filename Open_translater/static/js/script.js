@@ -52,8 +52,19 @@ document.getElementById("translateButton").addEventListener("click", function() 
         .then(response => response.json())
         .then(data => {
             document.getElementById("translatedText").innerText = data.translated_text;
+            updateKeywords(data.keywords, data.explanations);
         });
     } else {
         document.getElementById("translatedText").innerText = "";
     }
 });
+
+function updateKeywords(keywords, explanations) {
+    const keywordList = document.getElementById("keywordList");
+    keywordList.innerHTML = "";
+    keywords.forEach(word => {
+        const li = document.createElement("li");
+        li.textContent = `${word}: ${explanations[word]}`;
+        keywordList.appendChild(li);
+    });
+}

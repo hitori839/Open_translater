@@ -1,7 +1,14 @@
 from flask import Flask, render_template, request, jsonify
 from googletrans import Translator
+from keywords import extract_keywords, get_explanations  # 상단에 추가
+from flask_sqlalchemy import SQLAlchemy
+from models import db, TranslationHistory  # 추가
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///translations.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
+
 
 # 지원하는 언어 목록
 SUPPORTED_LANGUAGES = {
@@ -32,12 +39,37 @@ def translate():
     source_lang = request.form['source_lang']
     target_lang = request.form['target_lang']
 
-    # 번역 요청
+    # 번역
     translated = translator.translate(text, src=source_lang, dest=target_lang)
-    
+
+    # 핵심 단어 및 설명
+    keywords = extract_keywords(text, lang=source_lang)
+    explanations = get_explanations(keywords)
+
+    # 📌 번역 기록 저장
+    history = TranslationHistory(
+        source_text=text,
+        translated_text=translated.text,
+        source_lang=source_lang,
+        target_lang=target_lang
+    )
+    db.session.add(history)
+    db.session.commit()
+
     return jsonify({
-        'translated_text': translated.text
+        'translated_text': translated.text,
+        'keywords': keywords,
+        'explanations': explanations
     })
 
+    
+@app.route('/history')
+def history():
+    records = TranslationHistory.query.order_by(TranslationHistory.timestamp.desc()).limit(10).all()
+    return render_template('history.html', records=records)
+
+
+with app.app_context():
+    db.create_all()
 if __name__ == '__main__':
     app.run(debug=True)
