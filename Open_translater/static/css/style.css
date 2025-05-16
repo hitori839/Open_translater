@@ -1,5 +1,5 @@
 body {
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Pretendard', sans-serif;
     background-color: #f7f7f7;
     margin: 0;
     padding: 0;
@@ -40,16 +40,39 @@ h1 {
     top: -25px;
     left: 50%;
     transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
     z-index: 10;
 }
 
 .language-selection select {
-    width: 100%;
     padding: 8px;
     border-radius: 8px;
     border: 2px solid #ddd;
     font-size: 16px;
 }
+
+.lang-wrapper {
+    position: absolute;
+    top: -25px;         
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px; 
+    z-index: 10;
+}
+
+.icon {
+    font-size: 18px;
+}
+
+#sourceLang, #targetLang {
+    padding: 5px 10px;
+    font-size: 16px;
+}
+
 
 textarea {
     width: 100%;
@@ -91,19 +114,22 @@ textarea {
 
 
 button#translateButton {
+    display: block;
+    margin: 30px auto;
     padding: 12px 20px;
-    background-color: #4CAF50;
+    background-color: #4470e7;
     color: white;
     border: none;
     border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
-    width: 100%;
+    width: 30%;
     margin-top: 30px;
 }
 
 button#translateButton:hover {
-    background-color: #45a049;
+    background-color: #4c7cff;
+    transform: translateY(-2px);
 }
 
 .button-container {
