@@ -2,14 +2,17 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>실시간 번역</title>
+    <title>Open_trans</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
-<div class="container">
-    <h1>실시간 번역기</h1>
+<div class="navbar">
+        <img src="{{ url_for('static', filename='images/title_logo.png') }}" alt="로고">
+        <h1 class="site-title">Open_trans</h1>
+    </div>
 
+<div class="container">
     <div class="row">
         <!-- 입력 -->
         <div class="input-column">
@@ -21,6 +24,8 @@
                     {% endfor %}
                 </select>
             </div>
+            
+            
 
             <textarea id="text" placeholder="번역할 텍스트를 입력하세요"></textarea>
             <div id="charCount">0 / 1000</div>
