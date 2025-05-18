@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
     font-family: 'Pretendard', sans-serif;
     background-color: #f7f7f7;
@@ -52,20 +56,16 @@ body {
 .row {
      display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: stretch;
 }
 
-.input-column {
-    width: 48%;
-    display: flex;
-    flex-direction: column;
-    margin-top: 20px;
-}
-
+.input-column,
 .output-column {
-    width: 48%;
-    display: flex;
-    flex-direction: column;
+  width: 48%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
 }
 
 .language-selection {
@@ -99,22 +99,25 @@ textarea {
     border: 2px solid #ddd;
     border-radius: 8px;
     font-size: 16px;
-    margin-top: 40px;
     height: 150px;
     resize: none;
-    flex-grow: 1;
+    line-height: 1.5;
+    min-height: 150px;
+    flex: 1;
+    
 }
 
 #translatedText {
-    margin-top: 40px;
     padding: 15px;
     background-color: #f1f1f1;
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 18px;
-    min-height: 150px;
+    white-space: pre-wrap;
     word-wrap: break-word;
-    flex-grow: 1;
+    line-height: 1.5;
+    min-height: 150px;
+    flex: 1;
 }
 
 .copy-btn {
