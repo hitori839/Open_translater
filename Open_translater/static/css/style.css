@@ -21,7 +21,7 @@ body {
 
 .navbar h1 {
     color: #333;
-    font-size: 20px;
+    font-size: 30px;
     margin: 0px;
 }
 
@@ -35,22 +35,31 @@ body {
     background-color: white;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     display: flex;
+    justify-content: center;
     align-items: center;
-    padding: 0 20px;
     z-index: 999;
 }
 
 .navbar img {
-    height: 70px;
+    height: 40px;
     width: auto;
     object-fit: contain;
-    margin-right: 5px;
+    display: block;
+    margin-top: 15pt;
+}
+
+.logo-title {
+    display: flex;
+    gap: 5pt;
+    transform:translateX(-15px);
 }
 
 .site-title {
     font-size: 24px;
     font-weight: bold;
+    line-height: 70px;
     color: #333;
+    
 }
 
 .row {
@@ -99,10 +108,10 @@ textarea {
     border: 2px solid #ddd;
     border-radius: 8px;
     font-size: 16px;
-    height: 150px;
-    resize: none;
+    height: auto;
+    resize: vertical;
     line-height: 1.5;
-    min-height: 150px;
+    min-height: 250px;
     flex: 1;
     
 }
@@ -116,7 +125,7 @@ textarea {
     white-space: pre-wrap;
     word-wrap: break-word;
     line-height: 1.5;
-    min-height: 150px;
+    min-height: 250px;
     flex: 1;
 }
 
