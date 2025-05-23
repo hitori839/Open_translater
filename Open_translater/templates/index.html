@@ -19,14 +19,14 @@
         <!-- 입력 -->
         <div class="input-column">
             <div class="language-selection">
-            <span class="icon">✏️</span>
+                <span class="icon">✏️</span>
                 <select id="sourceLang">
                     {% for code, name in languages.items() %}
                         <option value="{{ code }}">{{ name }}</option>
                     {% endfor %}
                 </select>
             </div>
-            
+
             <textarea id="text" placeholder="번역할 텍스트를 입력하세요"></textarea>
             <div id="charCount">0 / 1000</div>
             <button class="copy-btn input-copy-btn" onclick="copyToClipboard('text')" title="입력 복사">📄</button>
@@ -35,7 +35,7 @@
         <!-- 출력 -->
         <div class="output-column">
             <div class="language-selection">
-            <span class="icon">🖨️</span>
+                <span class="icon">🖨️</span>
                 <select id="targetLang">
                     {% for code, name in languages.items() %}
                         <option value="{{ code }}">{{ name }}</option>
@@ -50,17 +50,34 @@
 
     <div class="button-container">
         <button id="translateButton">번역하기</button>
-        <a href="/history"><button>번역 기록 보기</button></a>
+        <button id="openHistory">번역 기록 보기</button>
     </div>
 
     <div class="keywords-section">
         <h3>📌 핵심 단어 및 설명</h3>
-        <ul id="keywordList"></ul> 
+        <ul id="keywordList"></ul>
     </div>
+</div>
 
+<!-- 모달 창 (기록 보기) -->
+<div id="historyModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>최근 번역 기록</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>시간</th>
+                    <th>번역 대상</th>
+                    <th>번역 결과</th>
+                    <th>언어</th>
+                </tr>
+            </thead>
+            <tbody id="historyTable"></tbody>
+        </table>
+    </div>
 </div>
 
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
-

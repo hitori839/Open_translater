@@ -9,25 +9,19 @@ function copyToClipboard(elementId) {
     });
 }
 
-document.getElementById("text").addEventListener("input", function() {
-    const textArea = document.getElementById("text");
-    const text = textArea.value;
+document.getElementById("text").addEventListener("input", function () {
+    const text = this.value;
     const sourceLang = document.getElementById("sourceLang").value;
     const targetLang = document.getElementById("targetLang").value;
-
-    // 글자 수 표시
-    const charCount = text.length;
-    document.getElementById("charCount").innerText = charCount + " / 1000";
+    document.getElementById("charCount").innerText = text.length + " / 1000";
 
     if (text.trim() !== "") {
         fetch('/translate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: 'text=' + encodeURIComponent(text) +
-                  '&source_lang=' + sourceLang +
-                  '&target_lang=' + targetLang
+            body: `text=${encodeURIComponent(text)}&source_lang=${sourceLang}&target_lang=${targetLang}&from_autosave=1`
         })
-        .then(response => response.json())
+        .then(res => res.json())
         .then(data => {
             document.getElementById("translatedText").innerText = data.translated_text;
         });
@@ -36,7 +30,7 @@ document.getElementById("text").addEventListener("input", function() {
     }
 });
 
-document.getElementById("translateButton").addEventListener("click", function() {
+document.getElementById("translateButton").addEventListener("click", function () {
     const text = document.getElementById("text").value;
     const sourceLang = document.getElementById("sourceLang").value;
     const targetLang = document.getElementById("targetLang").value;
@@ -45,11 +39,9 @@ document.getElementById("translateButton").addEventListener("click", function() 
         fetch('/translate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: 'text=' + encodeURIComponent(text) +
-                  '&source_lang=' + sourceLang +
-                  '&target_lang=' + targetLang
+            body: `text=${encodeURIComponent(text)}&source_lang=${sourceLang}&target_lang=${targetLang}`
         })
-        .then(response => response.json())
+        .then(res => res.json())
         .then(data => {
             document.getElementById("translatedText").innerText = data.translated_text;
             updateKeywords(data.keywords, data.explanations);
@@ -68,3 +60,42 @@ function updateKeywords(keywords, explanations) {
         keywordList.appendChild(li);
     });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const openBtn = document.getElementById("openHistory");
+    const closeBtn = document.querySelector(".close");
+
+    if (openBtn) {
+        openBtn.addEventListener("click", () => {
+            fetch("/history_json")
+                .then(res => res.json())
+                .then(data => {
+                    const table = document.getElementById("historyTable");
+                    table.innerHTML = "";
+                    data.forEach(record => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${record.timestamp}</td>
+                            <td>${record.source_text}</td>
+                            <td>${record.translated_text}</td>
+                            <td>${record.source_lang} → ${record.target_lang}</td>
+                        `;
+                        table.appendChild(row);
+                    });
+                    document.getElementById("historyModal").style.display = "block";
+                });
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+            document.getElementById("historyModal").style.display = "none";
+        });
+    }
+
+    window.onclick = function (event) {
+        if (event.target === document.getElementById("historyModal")) {
+            document.getElementById("historyModal").style.display = "none";
+        }
+    };
+});
