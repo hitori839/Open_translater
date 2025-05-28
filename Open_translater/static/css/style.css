@@ -208,7 +208,7 @@ button#translateButton:hover {
     font-size: 14px;
     color: #666;
     text-align: right;
-    transform: translateY(-2px);
+    transform: translateY(-3px);
 
 }
 .modal {
