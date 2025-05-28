@@ -28,8 +28,17 @@
             </div>
 
             <textarea id="text" placeholder="번역할 텍스트를 입력하세요"></textarea>
-            <div id="charCount">0 / 1000</div>
-            <button class="copy-btn input-copy-btn" onclick="copyToClipboard('text')" title="입력 복사">📄</button>
+            <div class="input-toolbar">
+                <div class="left-group">
+                    <button class="copy-btn" onclick="copyToClipboard('text')" title="입력 복사">📄</button>
+
+                    <button class="upload-btn" onclick="document.getElementById('fileInput').click();">📎문서 첨부</button>
+                    <input type="file" id="fileInput" accept=".pdf,.docx,.hwp,.hwpx"hidden>
+                    <span id="fileNameDisplay" style="margin-left: 10px; color: grey;"></span>
+                </div>
+                <div id="charCount">0 / 1000</div>
+            </div>
+>>>>>>> d7d2669 (문서 첨부 버튼, 결과 출력 버튼 생성)
         </div>
 
         <!-- 출력 -->
@@ -44,7 +53,11 @@
             </div>
 
             <div id="translatedText">번역 결과가 여기에 나타납니다.</div>
-            <button class="copy-btn output-copy-btn" onclick="copyToClipboard('translatedText')" title="출력 복사">📄</button>
+
+            <div class="output-toolbar">
+                <button class="copy-btn" onclick="copyToClipboard('translatedText')" title="출력 복사">📄</button>
+                <button class="output-btn">결과 출력</button>
+            </div>
         </div>
     </div>
 

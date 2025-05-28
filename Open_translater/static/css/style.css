@@ -63,7 +63,7 @@ body {
 }
 
 .row {
-     display: flex;
+    display: flex;
     justify-content: space-between;
     align-items: stretch;
 }
@@ -129,9 +129,38 @@ textarea {
     flex: 1;
 }
 
+.input-toolbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-group {
+    display: flex;
+}
+
+.output-btn,
+.upload-btn {
+    border: 2px solid #ccc;
+    background-color: white;
+    padding: 2px 2px;
+    font-size: 12px;
+    cursor: pointer;
+    color: #000000;
+    border-radius: 6px;
+}
+
+.output-btn:hover,
+.upload-btn:hover {
+   background-color: #ccc;
+}
+
+
+.output-toolbar {
+    display: flex;
+}
+
 .copy-btn {
     align-self: flex-start; /* 왼쪽 정렬로 변경 */
-    margin-top: 10px;
     background: none;
     border: none;
     cursor: pointer;
@@ -176,10 +205,11 @@ button#translateButton:hover {
 }
 
 #charCount {
-    margin-top: 8px;
     font-size: 14px;
     color: #666;
     text-align: right;
+    transform: translateY(-2px);
+
 }
 .modal {
   display: none;
@@ -221,3 +251,4 @@ button#translateButton:hover {
     background-color: #4c7cff;
     transform: translateY(-2px);
 }
+
