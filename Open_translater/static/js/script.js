@@ -1,3 +1,6 @@
+let uploadedFile = null;
+let translatedFileUrl = null;
+
 function copyToClipboard(elementId) {
     const element = document.getElementById(elementId);
     const text = elementId === 'translatedText' ? element.innerText : element.value;
@@ -9,33 +12,32 @@ function copyToClipboard(elementId) {
     });
 }
 
-document.getElementById("text").addEventListener("input", function () {
-    const text = this.value;
+document.getElementById("fileInput").addEventListener("change", function () {
+    uploadedFile = this.files[0];
+    document.getElementById("fileNameDisplay").innerText = uploadedFile.name;
+});
+
+document.getElementById("translateButton").addEventListener("click", function () {
     const sourceLang = document.getElementById("sourceLang").value;
     const targetLang = document.getElementById("targetLang").value;
-    document.getElementById("charCount").innerText = text.length + " / 1000";
 
-    if (text.trim() !== "") {
-        fetch('/translate', {
+    if (uploadedFile) {
+        const formData = new FormData();
+        formData.append('file', uploadedFile);
+        formData.append('source_lang', sourceLang);
+        formData.append('target_lang', targetLang);
+
+        fetch('/upload_translate', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `text=${encodeURIComponent(text)}&source_lang=${sourceLang}&target_lang=${targetLang}&from_autosave=1`
+            body: formData
         })
         .then(res => res.json())
         .then(data => {
             document.getElementById("translatedText").innerText = data.translated_text;
+            translatedFileUrl = data.download_url;
         });
     } else {
-        document.getElementById("translatedText").innerText = "";
-    }
-});
-
-document.getElementById("translateButton").addEventListener("click", function () {
-    const text = document.getElementById("text").value;
-    const sourceLang = document.getElementById("sourceLang").value;
-    const targetLang = document.getElementById("targetLang").value;
-
-    if (text.trim() !== "") {
+        const text = document.getElementById("text").value;
         fetch('/translate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -44,22 +46,23 @@ document.getElementById("translateButton").addEventListener("click", function ()
         .then(res => res.json())
         .then(data => {
             document.getElementById("translatedText").innerText = data.translated_text;
-            updateKeywords(data.keywords, data.explanations);
+            translatedFileUrl = null;
         });
-    } else {
-        document.getElementById("translatedText").innerText = "";
     }
 });
 
-function updateKeywords(keywords, explanations) {
-    const keywordList = document.getElementById("keywordList");
-    keywordList.innerHTML = "";
-    keywords.forEach(word => {
-        const li = document.createElement("li");
-        li.textContent = `${word}: ${explanations[word]}`;
-        keywordList.appendChild(li);
-    });
-}
+document.querySelector(".output-btn").addEventListener("click", function () {
+    if (translatedFileUrl) {
+        const link = document.createElement("a");
+        link.href = translatedFileUrl;
+        link.download = "";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } else {
+        alert("파일을 첨부하고 번역한 경우에만 다운로드할 수 있습니다.");
+    }
+});
 
 document.addEventListener("DOMContentLoaded", function () {
     const openBtn = document.getElementById("openHistory");
@@ -98,4 +101,33 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("historyModal").style.display = "none";
         }
     };
+
+    // 🔻 실시간 번역
+    let typingTimer;
+    const doneTypingInterval = 1000;
+    const textInput = document.getElementById("text");
+
+    textInput.addEventListener("input", function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(() => {
+            if (!textInput.value.trim()) {
+                document.getElementById("translatedText").innerText = "";
+                return;
+            }
+
+            const sourceLang = document.getElementById("sourceLang").value;
+            const targetLang = document.getElementById("targetLang").value;
+            const text = textInput.value;
+
+            fetch('/translate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `text=${encodeURIComponent(text)}&source_lang=${sourceLang}&target_lang=${targetLang}&from_autosave=true`
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("translatedText").innerText = data.translated_text;
+            });
+        }, doneTypingInterval);
+    });
 });

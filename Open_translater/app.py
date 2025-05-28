@@ -1,22 +1,25 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from googletrans import Translator
-from keywords import extract_keywords, get_explanations
-from flask_sqlalchemy import SQLAlchemy
 from models import db, TranslationHistory
+from utils import handle_uploaded_file
+import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///translations.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['UPLOAD_FOLDER'] = 'uploaded'
+app.config['TRANSLATED_FOLDER'] = 'translated'
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+os.makedirs(app.config['TRANSLATED_FOLDER'], exist_ok=True)
+
 db.init_app(app)
+translator = Translator()
 
 SUPPORTED_LANGUAGES = {
     'ko': '한국어', 'en': '영어', 'ja': '일본어', 'zh-CN': '중국어(간체)',
     'zh-TW': '중국어(번체)', 'es': '스페인어', 'fr': '프랑스어',
-    'de': '독일어', 'ru': '러시아어', 'vi': '베트남어',
-    'id': '인도네시아어', 'th': '태국어'
+    'de': '독일어', 'ru': '러시아어', 'vi': '베트남어', 'id': '인도네시아어', 'th': '태국어'
 }
-
-translator = Translator()
 
 @app.route('/')
 def index():
@@ -29,10 +32,7 @@ def translate():
     target_lang = request.form['target_lang']
 
     translated = translator.translate(text, src=source_lang, dest=target_lang)
-    keywords = extract_keywords(text, lang=source_lang)
-    explanations = get_explanations(keywords)
 
-    # ✅ 자동 번역 요청이 아닌 경우에만 기록 저장
     if not request.form.get('from_autosave'):
         history = TranslationHistory(
             source_text=text,
@@ -45,9 +45,29 @@ def translate():
 
     return jsonify({
         'translated_text': translated.text,
-        'keywords': keywords,
-        'explanations': explanations
     })
+
+@app.route('/upload_translate', methods=['POST'])
+def upload_translate():
+    file = request.files['file']
+    source_lang = request.form['source_lang']
+    target_lang = request.form['target_lang']
+
+    saved_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+    file.save(saved_path)
+
+    translated_text, output_path = handle_uploaded_file(saved_path, source_lang, target_lang, app.config['TRANSLATED_FOLDER'])
+
+    download_url = f'/download/{os.path.basename(output_path)}'  # 다운로드용 URL 생성
+
+    return jsonify({
+        'translated_text': translated_text,
+        'download_url': download_url
+    })
+
+@app.route('/download/<filename>')
+def download(filename):
+    return send_from_directory(app.config['TRANSLATED_FOLDER'], filename, as_attachment=True)
 
 @app.route('/history_json')
 def history_json():
