@@ -33,7 +33,7 @@
                     <button class="copy-btn" onclick="copyToClipboard('text')" title="입력 복사">📄</button>
 
                     <button class="upload-btn" onclick="document.getElementById('fileInput').click();">📎문서 첨부</button>
-                    <input type="file" id="fileInput" accept=".pdf,.docx,.hwp,.hwpx"hidden>
+                    <input type="file" id="fileInput" accept=".pdf,.docx,.hwp,.hwpx" hidden>
                     <span id="fileNameDisplay" style="margin-left: 10px; color: grey;"></span>
                 </div>
                 <div id="charCount">0 / 1000</div>
@@ -62,6 +62,7 @@
 
     <div class="button-container">
         <button id="translateButton">번역하기</button>
+        <button onclick="swapLanguages()">🔀 언어 바꾸기</button>
         <button id="openHistory">번역 기록 보기</button>
     </div>
 </div>
@@ -84,6 +85,75 @@
         </table>
     </div>
 </div>
+
+<script>
+    // 언어 바꾸기 + 자동 번역
+    function swapLanguages() {
+        const sourceSelect = document.getElementById("sourceLang");
+        const targetSelect = document.getElementById("targetLang");
+        const temp = sourceSelect.value;
+        sourceSelect.value = targetSelect.value;
+        targetSelect.value = temp;
+        translate(); // 자동 번역
+    }
+
+    // 번역 함수
+    function translate() {
+        const text = document.getElementById("text").value;
+        const sourceLang = document.getElementById("sourceLang").value;
+        const targetLang = document.getElementById("targetLang").value;
+
+        if (!text.trim()) {
+            alert("번역할 텍스트를 입력해주세요.");
+            return;
+        }
+
+        fetch("/translate", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `text=${encodeURIComponent(text)}&source_lang=${sourceLang}&target_lang=${targetLang}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("translatedText").innerText = data.translated_text;
+
+            // 키워드 및 설명 표시
+            if (data.keywords && data.explanations) {
+                const keywordList = document.getElementById("keywordList");
+                if (keywordList) {
+                    keywordList.innerHTML = "";
+                    data.keywords.forEach((kw, i) => {
+                        const li = document.createElement("li");
+                        li.textContent = `${kw}: ${data.explanations[i]}`;
+                        keywordList.appendChild(li);
+                    });
+                }
+            }
+        })
+        .catch(error => {
+            console.error("번역 실패:", error);
+            alert("번역 중 오류가 발생했습니다.");
+        });
+    }
+
+    // 번역 버튼 클릭
+    document.getElementById("translateButton").addEventListener("click", translate);
+
+    // 글자 수 카운트
+    document.getElementById("text").addEventListener("input", function () {
+        const count = this.value.length;
+        document.getElementById("charCount").innerText = `${count} / 1000`;
+    });
+
+    // 복사 기능
+    function copyToClipboard(id) {
+        const el = document.getElementById(id);
+        const text = id === "translatedText" ? el.innerText : el.value;
+        navigator.clipboard.writeText(text).then(() => {
+            alert("복사되었습니다.");
+        });
+    }
+</script>
 
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
