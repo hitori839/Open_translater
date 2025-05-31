@@ -251,4 +251,21 @@ button#translateButton:hover {
     background-color: #4c7cff;
     transform: translateY(-2px);
 }
+/* 모달 안 테이블 스타일 */
+.modal table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.modal th, .modal td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.modal th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
 
