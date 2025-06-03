@@ -62,12 +62,11 @@
 
     <div class="button-container">
         <button id="translateButton">번역하기</button>
-        <button onclick="swapLanguages()">🔀 언어 바꾸기</button>
-        <button id="openHistory">번역 기록 보기</button>
+        <button class="output-btn" onclick="swapLanguages()">🔀 언어 바꾸기</button>
+        <button class="output-btn" id="openHistory">🕐 번역 기록 보기</button>
     </div>
 </div>
 
-<!-- 모달 창 (기록 보기) -->
 <div id="historyModal" class="modal" style="display:none;">
     <div class="modal-content">
         <span class="close">&times;</span>
@@ -75,12 +74,13 @@
         <table>
             <thead>
                 <tr>
-                    <th>시간</th>
-                    <th>번역 대상</th>
-                    <th>번역 결과</th>
-                    <th>언어</th>
+                   <th style="width: 10%;">시간</th>
+                   <th style="width: 40%;">번역 전</th>
+                   <th style="width: 40%;">번역 후</th>
+                   <th style="width: 10%;">언어</th>
                 </tr>
             </thead>
+
             <tbody id="historyTable"></tbody>
         </table>
     </div>
