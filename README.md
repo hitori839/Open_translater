@@ -12,7 +12,7 @@ python -m venv venv
 source venv/bin/activate
 
 # 가상환경 활성화 (Windows PowerShell)
-venv\Scripts\activate
+source venv/Scripts/activate
 
 # 필요한 패키지 설치
 pip install flask

@@ -67,7 +67,8 @@ def upload_translate():
 
 @app.route('/download/<filename>')
 def download(filename):
-    return send_from_directory(app.config['TRANSLATED_FOLDER'], filename, as_attachment=True)
+    translated_folder = os.path.abspath(app.config['TRANSLATED_FOLDER'])
+    return send_from_directory(translated_folder, filename, as_attachment=True)
 
 @app.route('/history_json')
 def history_json():

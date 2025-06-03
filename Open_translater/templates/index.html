@@ -87,25 +87,40 @@
 </div>
 
 <script>
-    // 언어 바꾸기 + 자동 번역
     function swapLanguages() {
         const sourceSelect = document.getElementById("sourceLang");
         const targetSelect = document.getElementById("targetLang");
-        const temp = sourceSelect.value;
+        const sourceTextArea = document.getElementById("text");
+        const translatedTextDiv = document.getElementById("translatedText");
+
+        // 언어 스왑
+        const tempLang = sourceSelect.value;
         sourceSelect.value = targetSelect.value;
-        targetSelect.value = temp;
-        translate(); // 자동 번역
+        targetSelect.value = tempLang;
+
+        // 텍스트 스왑
+        const tempText = sourceTextArea.value;
+        sourceTextArea.value = translatedTextDiv.innerText;
+        translatedTextDiv.innerText = tempText;
+
+        // 자동 번역 실행
+        translate(true);  // fromSwap = true
     }
 
     // 번역 함수
-    function translate() {
+    function translate(fromSwap = false) {
         const text = document.getElementById("text").value;
         const sourceLang = document.getElementById("sourceLang").value;
         const targetLang = document.getElementById("targetLang").value;
 
+        // 경고 문구 생략 조건 처리
         if (!text.trim()) {
-            alert("번역할 텍스트를 입력해주세요.");
-            return;
+            if (!uploadedFile) {
+                if (!fromSwap) {
+                    alert("번역할 텍스트를 입력하거나 문서를 첨부해주세요.");
+                }
+                return;
+            }
         }
 
         fetch("/translate", {
@@ -116,19 +131,7 @@
         .then(response => response.json())
         .then(data => {
             document.getElementById("translatedText").innerText = data.translated_text;
-
-            // 키워드 및 설명 표시
-            if (data.keywords && data.explanations) {
-                const keywordList = document.getElementById("keywordList");
-                if (keywordList) {
-                    keywordList.innerHTML = "";
-                    data.keywords.forEach((kw, i) => {
-                        const li = document.createElement("li");
-                        li.textContent = `${kw}: ${data.explanations[i]}`;
-                        keywordList.appendChild(li);
-                    });
-                }
-            }
+            // 키워드/설명 처리 생략 가능
         })
         .catch(error => {
             console.error("번역 실패:", error);
