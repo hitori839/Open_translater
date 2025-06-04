@@ -4,10 +4,14 @@ from googletrans import Translator
 from docx import Document
 from PyPDF2 import PdfReader
 from docx import Document as DocxDocument
+from fpdf import FPDF
 
 translator = Translator()
 
 def handle_uploaded_file(filepath, source_lang, target_lang, output_folder):
+
+    translator = Translator()
+
     filename = os.path.basename(filepath)
     name, ext = os.path.splitext(filename)
     ext = ext.lower()
@@ -23,7 +27,6 @@ def handle_uploaded_file(filepath, source_lang, target_lang, output_folder):
 
     translated = translator.translate(text, src=source_lang, dest=target_lang).text
 
-    # 안전한 파일명 생성
     safe_name = uuid.uuid4().hex
 
     if ext == '.docx':
@@ -36,15 +39,19 @@ def handle_uploaded_file(filepath, source_lang, target_lang, output_folder):
         new_doc.save(output_path)
 
     elif ext == '.pdf':
-        # PDF 번역 결과를 docx로 저장할 수도 있으나, 여기서는 txt로 저장
         output_filename = f"{safe_name}_translated.pdf"
         output_path = os.path.join(os.path.abspath(output_folder), output_filename)
 
-        from fpdf import FPDF
         pdf = FPDF()
         pdf.add_page()
         pdf.set_auto_page_break(auto=True, margin=15)
-        pdf.set_font("Arial", size=12)
+
+        # ✅ TTF 폰트 등록 (예: 나눔고딕, 맑은 고딕 등)
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        font_path = os.path.join(base_dir, "NanumGothic.ttf")
+        pdf.add_font("Nanum", "", font_path, uni=True)
+        pdf.set_font("Nanum", size=12)
+
         for line in translated.split("\n"):
             pdf.multi_cell(0, 10, line)
         pdf.output(output_path)

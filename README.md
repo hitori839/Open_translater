@@ -27,7 +27,7 @@ pip install flask googletrans==4.0.0-rc1
 pip install flask_sqlalchemy
 pip install python-docx
 pip install PyPDF2
-
+pip install fpdf
 
 ## 📁 소스코드 소개
 Open_translater/
